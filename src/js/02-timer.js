@@ -2,13 +2,19 @@ import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 
 const btnStart = document.querySelector('[data-start]');
+const daysMonitor = document.querySelector('span[data-days]');
+const hoursMonitor = document.querySelector('span[data-hours]');
+const minutesMonitor = document.querySelector('span[data-minutes]');
+const secondsMonitor = document.querySelector('span[data-seconds]');
+
+
+
+
 let startDate;
 let startDateUnix;
 let currentDate;
 let deltaTime = null; 
 
-
-btnStart.addEventListener('click', onStartClick);
 btnStart.setAttribute('disabled', true)
 
  const options = {
@@ -25,29 +31,36 @@ btnStart.setAttribute('disabled', true)
     console.log("startDate", startDate.getTime())
     console.log('currentDate', currentDate)
 
-    if (startDateUnix > currentDate) {
-     btnStart.removeAttribute('disabled');
-} else
-    {
+    if (startDateUnix < currentDate) {
       window.alert("Please choose a date in the future")
       location.reload();
-    }
-    
-  deltaTime = setInterval(() => {
-    const timer = startDateUnix - Date.now();
+} 
+    btnStart.removeAttribute('disabled');
+    let btnStartEvtListener = btnStart.addEventListener('click', onStartClick);
+    function onStartClick() {
+      btnStart.setAttribute('disabled', true);
+      deltaTime = setInterval(() => {
+        const timer = startDateUnix - Date.now();
 
- if (Math.floor(timer < 1000)){
-        stopTimer();
-      }
-      const { days, hours, minutes, seconds } = convertMs(timer);
-      console.log(`${days}: ${hours}: ${minutes}: ${seconds}`)
+        if (timer < 1000) {
+          stopTimer();
+        }
+        const { days, hours, minutes, seconds } = convertMs(timer);
+        daysMonitor.textContent = days;
+        hoursMonitor.textContent = hours;
+        minutesMonitor.textContent = minutes;
+     secondsMonitor.textContent = seconds;
+
+        console.log(`${days}: ${hours}: ${minutes}: ${seconds}`)
       }, 1000)
+    }
  },
 };
 
+
 function stopTimer() {
-  console.log('РОЗПРОДАЖ РОЗПОЧАТО !!!')
-  clearTimeout(deltaTime);
+   clearTimeout(deltaTime);
+   console.log('РОЗПРОДАЖ РОЗПОЧАТО !!!')
  }
 
 flatpickr('#datetime-picker', options)
@@ -73,7 +86,5 @@ function convertMs(ms) {
   return { days, hours, minutes, seconds };
 }
 
-function onStartClick() {
-  console.log("старт")
-}
+
 
