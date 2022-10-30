@@ -7,9 +7,6 @@ const hoursMonitor = document.querySelector('span[data-hours]');
 const minutesMonitor = document.querySelector('span[data-minutes]');
 const secondsMonitor = document.querySelector('span[data-seconds]');
 
-
-
-
 let startDate;
 let startDateUnix;
 let currentDate;
@@ -17,56 +14,55 @@ let deltaTime = null;
 
 btnStart.setAttribute('disabled', true)
 
- const options = {
+const options = {
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
-  onClose(selectedDates) {
-   
-     startDate = new Date(selectedDates[0]);
-     startDateUnix = startDate.getTime()
-     currentDate = Date.now()
+  
+onClose(selectedDates) {
+        startDate = new Date(selectedDates[0]);
+        startDateUnix = startDate.getTime()
+        currentDate = Date.now()
+   console.log("startDate", startDate.getTime())
+   console.log('currentDate', currentDate)
 
-    console.log("startDate", startDate.getTime())
-    console.log('currentDate', currentDate)
-
-    if (startDateUnix < currentDate) {
+   if (startDateUnix < currentDate){
       window.alert("Please choose a date in the future")
       location.reload();
 } 
-    btnStart.removeAttribute('disabled');
-    let btnStartEvtListener = btnStart.addEventListener('click', onStartClick);
-    function onStartClick() {
-      btnStart.setAttribute('disabled', true);
-      deltaTime = setInterval(() => {
-        const timer = startDateUnix - Date.now();
+   btnStart.removeAttribute('disabled');
+   let btnStartEvtListener = btnStart.addEventListener('click', onStartClick);
+    
+function onStartClick(){
+  btnStart.setAttribute('disabled', true);
+    
+deltaTime = setInterval(() => {
+  const timer = startDateUnix - Date.now();
 
-        if (timer < 1000) {
-          stopTimer();
-        }
-        const { days, hours, minutes, seconds } = convertMs(timer);
-        daysMonitor.textContent = days;
-        hoursMonitor.textContent = hours;
-        minutesMonitor.textContent = minutes;
-     secondsMonitor.textContent = seconds;
+  if (timer < 1000) {
+    stopTimer();
+}
+  const { days, hours, minutes, seconds } = convertMs(timer);
+  console.log(`${days}: ${hours}: ${minutes}: ${seconds}`)
 
-        console.log(`${days}: ${hours}: ${minutes}: ${seconds}`)
-      }, 1000)
-    }
- },
+    daysMonitor.textContent = days + " :";
+    hoursMonitor.textContent = hours + " :";
+    minutesMonitor.textContent = minutes + " :";
+    secondsMonitor.textContent = seconds;
+}, 1000)
+}
+},
 };
 
+  flatpickr('#datetime-picker', options)
 
-function stopTimer() {
-   clearTimeout(deltaTime);
-   console.log('РОЗПРОДАЖ РОЗПОЧАТО !!!')
- }
+  function stopTimer() {
+    clearTimeout(deltaTime);
+}
 
-flatpickr('#datetime-picker', options)
-
-function addLeadingZero(value) {
-  return String(value).padStart(2, '0');
+ function addLeadingZero(value) {
+   return String(value).padStart(2, '0');
 }
 
 function convertMs(ms) {
