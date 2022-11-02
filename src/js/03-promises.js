@@ -1,5 +1,5 @@
 
-refForm = document.querySelector('form')
+const refForm = document.querySelector('form')
 refForm.addEventListener('submit', onFormSubmit);
 let resolvePromise = 0;
 let rejectPromise = 0;
