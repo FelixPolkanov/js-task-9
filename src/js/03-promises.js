@@ -1,12 +1,12 @@
 
-formRef = document.querySelector('.form')
-formRef.addEventListener('submit', onFormSubmit);
+refForm = document.querySelector('form')
+refForm.addEventListener('submit', onFormSubmit);
 let resolvePromise = 0;
 let rejectPromise = 0;
 
 function onFormSubmit(evt) {
   evt.preventDefault();
-  totalPromise(getInputValues(formRef.elements));
+  totalPromise(getInputValues(refForm.elements));
 }
 
 function getInputValues({ delay, step, amount }) {
